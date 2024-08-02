@@ -44,7 +44,7 @@ const BookCardItem: FC<Props> = ({ item }) => {
             mb: 2,
           }}
         >
-          <Image src={item.cover} width={260} height={260} alt={'Book cover ' + item.id} />
+          <Image src={item.coverImage} width={260} height={260} alt={'Book cover ' + item._id} />
         </Box>
         <Box sx={{ mb: 2 }}>
           <Typography component="h2" variant="h5" sx={{ mb: 2, height: 56, overflow: 'hidden', fontSize: '1.2rem' }}>
@@ -62,7 +62,7 @@ const BookCardItem: FC<Props> = ({ item }) => {
               {item.publishedYear}
             </Typography>
           </Box>
-          <Link href={`/books/${item.id}`} passHref>
+          <Link href={`/books/${item._id}`} passHref>
             <IconButton
               color="primary"
               sx={{ '&:hover': { backgroundColor: 'primary.main', color: 'primary.contrastText' } }}

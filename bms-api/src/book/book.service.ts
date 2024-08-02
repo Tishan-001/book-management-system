@@ -66,13 +66,12 @@ export class BookService {
 
   async update(id: string, updateBookInput: UpdateBookInput): Promise<Book> {
     try {
-      const book = await this.bookModel
-        .findByIdAndUpdate(id, updateBookInput, { new: true })
-        .exec();
+      const book = await this.bookModel.findById(id).exec();
       if (!book) {
         throw new NotFoundException('Book not found');
       }
-      return book;
+      await this.bookModel.updateOne({ _id: id }, updateBookInput).exec();
+      return this.bookModel.findById(id).exec();
     } catch (error) {
       return error;
     }

@@ -21,16 +21,16 @@ interface ExpItemProps {
 
 const exps: Array<Exp> = [
   {
-    label: "Users",
+    label: "Books",
     value: "10K+",
   },
   {
-    label: "Book Categories",
-    value: "5+",
+    label: "Users",
+    value: "100+",
   },
   {
-    label: "Experience Mentors",
-    value: "10+",
+    label: "Reviews",
+    value: "100+",
   },
 ];
 
@@ -191,7 +191,7 @@ const HomeHero: FC = () => {
                     variant="outlined"
                     startIcon={<PlayArrowIcon />}
                   >
-                    Read Book
+                    See Books
                   </StyledButton>
                 </ScrollLink>
               </Box>

@@ -13,4 +13,8 @@ export const navigations: Navigation[] = [
     label: 'Contact Us',
     path: '/contact-us',
   },
+  {
+    label: 'Add Book',
+    path: '/add-book',
+  }
 ]

@@ -3,10 +3,14 @@
 # ------------------------------------------------------
 
 type Book {
+  _id: ID!
   title: String!
+  coverImage: String
   author: String!
-  publishedYear: Int!
+  publishedYear: String!
   genre: String
+  pdfLink: String
+  description: String!
   ownerId: User!
 }
 
@@ -21,6 +25,12 @@ type User {
 
 type LoginResponse {
   access_token: String!
+  _id: String!
+}
+
+type File {
+  filename: String!
+  url: String!
 }
 
 type Query {
@@ -31,15 +41,19 @@ type Query {
 }
 
 type Mutation {
+  uploadFile(file: Upload!): File
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): String!
   createBook(createBookInput: CreateBookInput!, ownerId: String!): Book!
-  updateBook(updateBookInput: UpdateBookInput!): Book!
+  updateBook(id: String!, updateBookInput: UpdateBookInput!): Book!
   removeBook(id: String!): String!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateUserInput {
   firstName: String!
@@ -58,17 +72,20 @@ input UpdateUserInput {
 
 input CreateBookInput {
   title: String!
+  coverImage: String
   author: String!
-  publishedYear: Int!
+  publishedYear: String!
   genre: String
+  pdfLink: String
+  description: String!
 }
 
 input UpdateBookInput {
-  _id: String!
   title: String
   author: String
-  publishedYear: Int
+  publishedYear: String
   genre: String
+  description: String
 }
 
 input LoginUserInput {

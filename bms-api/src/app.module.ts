@@ -9,6 +9,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { BookModule } from './book/book.module';
 import { AuthModule } from './auth/auth.module';
+import { FirebaseService } from './firebase/firebase.service';
+import { FileUploadService } from './fileupload/fileupload.service';
+import { FileUploadResolver } from './fileupload/fileupload.resolver';
 
 @Module({
   imports: [
@@ -26,6 +29,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    FirebaseService,
+    FileUploadService,
+    FileUploadResolver,
+  ],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Field, ObjectType, Int } from '@nestjs/graphql';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
+import { Field, ObjectType, ID } from '@nestjs/graphql';
 import { User } from 'src/user/schema/user.schema';
 
 export type BookDocument = HydratedDocument<Book>;
@@ -8,24 +8,39 @@ export type BookDocument = HydratedDocument<Book>;
 @Schema()
 @ObjectType()
 export class Book {
+  @Field(() => ID)
+  _id: Types.ObjectId;
+
   @Field(() => String)
   @Prop({ required: true })
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Prop()
+  coverImage?: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
   author: string;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Prop({ required: true })
-  publishedYear: number;
+  publishedYear: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @Prop()
-  genre: string;
+  genre?: string;
+
+  @Field(() => String, { nullable: true })
+  @Prop()
+  pdfLink?: string;
+
+  @Field(() => String)
+  @Prop({ required: true })
+  description: string;
 
   @Field(() => User)
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   ownerId: User;
 }
 

@@ -1,6 +1,8 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { REGISTER_MUTATION } from '@/lib/graphql-mutation';
 import {
   Box,
   Container,
@@ -10,8 +12,39 @@ import {
   Grid,
 } from '@mui/material';
 import { Logo } from '../logo';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [register, { loading, error }] = useMutation(REGISTER_MUTATION);
+  const router = useRouter();
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const { data } = await register({
+        variables: {
+          createUserInput: {
+            firstName,
+            lastName,
+            email,
+            password,
+          },
+        },
+      });
+
+      router.push('/login');
+    } catch (err) {
+      console.error('Registration failed:', err);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -41,7 +74,7 @@ const Register = () => {
           <Typography variant="subtitle1" sx={{ mb: 3 }}>
             Please fill in this form to create an account.
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1, width: '80%' }}>
+          <Box component="form" noValidate sx={{ mt: 1, width: '80%' }} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -51,6 +84,8 @@ const Register = () => {
                   label="First Name"
                   name="firstName"
                   autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -61,6 +96,8 @@ const Register = () => {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -71,6 +108,8 @@ const Register = () => {
                   label="E-mail"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -82,6 +121,8 @@ const Register = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -96,6 +137,7 @@ const Register = () => {
             >
               Build Your Store
             </Button>
+            {error && <Typography color="error">{error.message}</Typography>}
           </Box>
         </Box>
       </Container>

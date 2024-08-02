@@ -1,36 +1,41 @@
-'use client';
+"use client";
 
-import React, { FC } from 'react'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Slider, { Settings } from 'react-slick'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import { useTheme, styled } from '@mui/material/styles'
-import { IconButton, useMediaQuery } from '@mui/material'
-import IconArrowBack from '@mui/icons-material/ArrowBack'
-import IconArrowForward from '@mui/icons-material/ArrowForward'
+import React, { FC } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Slider, { Settings } from "react-slick";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import { useTheme, styled } from "@mui/material/styles";
+import { IconButton, useMediaQuery } from "@mui/material";
+import IconArrowBack from "@mui/icons-material/ArrowBack";
+import IconArrowForward from "@mui/icons-material/ArrowForward";
 
-import { data } from './popular-book.data'
-import { BookCardItem } from '@/components/book'
+import { BookCardItem } from "@/components/book";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_BOOKS } from "@/lib";
+import { Book } from "@/interfaces/book";
 
 interface SliderArrowArrow {
-  onClick?: () => void
-  type: 'next' | 'prev'
-  className?: 'string'
+  onClick?: () => void;
+  type: "next" | "prev";
+  className?: "string";
 }
 
 const SliderArrow: FC<SliderArrowArrow> = (props) => {
-  const { onClick, type, className } = props
+  const { onClick, type, className } = props;
   return (
     <IconButton
       sx={{
-        backgroundColor: 'background.paper',
-        color: 'primary.main',
-        '&:hover': { backgroundColor: 'primary.main', color: 'primary.contrastText' },
-        bottom: { xs: '-70px !important', md: '-28px !important' },
-        left: 'unset !important',
-        right: type === 'prev' ? '60px !important' : '0 !important',
+        backgroundColor: "background.paper",
+        color: "primary.main",
+        "&:hover": {
+          backgroundColor: "primary.main",
+          color: "primary.contrastText",
+        },
+        bottom: { xs: "-70px !important", md: "-28px !important" },
+        left: "unset !important",
+        right: type === "prev" ? "60px !important" : "0 !important",
         zIndex: 10,
         boxShadow: 1,
       }}
@@ -39,30 +44,34 @@ const SliderArrow: FC<SliderArrowArrow> = (props) => {
       onClick={onClick}
       className={className}
     >
-      {type === 'next' ? <IconArrowForward sx={{ fontSize: 22 }} /> : <IconArrowBack sx={{ fontSize: 22 }} />}
+      {type === "next" ? (
+        <IconArrowForward sx={{ fontSize: 22 }} />
+      ) : (
+        <IconArrowBack sx={{ fontSize: 22 }} />
+      )}
     </IconButton>
-  )
-}
+  );
+};
 
-const StyledDots = styled('ul')(({ theme }) => ({
-  '&.slick-dots': {
-    position: 'absolute',
+const StyledDots = styled("ul")(({ theme }) => ({
+  "&.slick-dots": {
+    position: "absolute",
     left: 0,
     bottom: -20,
     paddingLeft: theme.spacing(1),
-    textAlign: 'left',
-    '& li': {
+    textAlign: "left",
+    "& li": {
       marginRight: theme.spacing(2),
-      '&.slick-active>div': {
+      "&.slick-active>div": {
         backgroundColor: theme.palette.primary.main,
       },
     },
   },
-}))
+}));
 
 const HomePopularBooks: FC = () => {
-  const { breakpoints } = useTheme()
-  const matchMobileView = useMediaQuery(breakpoints.down('md'))
+  const { breakpoints } = useTheme();
+  const matchMobileView = useMediaQuery(breakpoints.down("md"));
 
   const sliderConfig: Settings = {
     infinite: true,
@@ -75,9 +84,46 @@ const HomePopularBooks: FC = () => {
     dots: true,
     appendDots: (dots) => <StyledDots>{dots}</StyledDots>,
     customPaging: () => (
-      <Box sx={{ height: 8, width: 30, backgroundColor: 'divider', display: 'inline-block', borderRadius: 4 }} />
+      <Box
+        sx={{
+          height: 8,
+          width: 30,
+          backgroundColor: "divider",
+          display: "inline-block",
+          borderRadius: 4,
+        }}
+      />
     ),
+  };
+
+  const { loading, error, data } = useQuery<{ findAllBooks: Book[] }>(
+    GET_ALL_BOOKS
+  );
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "background.default",
+          zIndex: 1300,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
+
+  if (error) return <p>Error: {error.message}</p>;
+
+  const popularBooks: Book[] = data?.findAllBooks.slice(0, 5) || [];
 
   return (
     <Box
@@ -88,7 +134,7 @@ const HomePopularBooks: FC = () => {
           md: 8,
         },
         pb: 14,
-        backgroundColor: 'background.default',
+        backgroundColor: "background.default",
       }}
     >
       <Container maxWidth="lg">
@@ -96,14 +142,17 @@ const HomePopularBooks: FC = () => {
           <Grid item xs={12} md={3}>
             <Box
               sx={{
-                height: '100%',
-                width: { xs: '100%', md: '90%' },
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: { xs: 'center', md: 'flex-start' },
+                height: "100%",
+                width: { xs: "100%", md: "90%" },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "center", md: "flex-start" },
               }}
             >
-              <Typography variant="h1" sx={{ mt: { xs: 0, md: -5 }, fontSize: { xs: 30, md: 48 } }}>
+              <Typography
+                variant="h1"
+                sx={{ mt: { xs: 0, md: -5 }, fontSize: { xs: 30, md: 48 } }}
+              >
                 Most Popular Books
               </Typography>
             </Box>
@@ -111,15 +160,15 @@ const HomePopularBooks: FC = () => {
 
           <Grid item xs={12} md={9}>
             <Slider {...sliderConfig}>
-              {data.map((item) => (
-                <BookCardItem key={String(item.id)} item={item} />
+              {popularBooks.map((item, index) => (
+                <BookCardItem key={String(index)} item={item} />
               ))}
             </Slider>
           </Grid>
         </Grid>
       </Container>
     </Box>
-  )
-}
+  );
+};
 
 export default HomePopularBooks;

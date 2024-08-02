@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MUIProvider } from '@/providers';
+import { MainLayout } from "@/layout";
 import { Inter } from "next/font/google";
 import 'slick-carousel/slick/slick.css';
 import '@/styles/globals.css';
@@ -20,9 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MUIProvider>
-          {children}
-        </MUIProvider>
+          <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

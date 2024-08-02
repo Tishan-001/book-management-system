@@ -1,10 +1,10 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class LoginResponse {
+export class File {
   @Field()
-  access_token: string;
+  filename: string;
 
   @Field()
-  _id: string;
+  url: string;
 }

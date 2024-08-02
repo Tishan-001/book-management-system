@@ -30,9 +30,10 @@ export class BookResolver {
 
   @Mutation(() => Book)
   async updateBook(
+    @Args('id', { type: () => String }) id: string,
     @Args('updateBookInput') updateBookInput: UpdateBookInput,
   ): Promise<Book> {
-    return this.bookService.update(updateBookInput._id, updateBookInput);
+    return this.bookService.update(id, updateBookInput);
   }
 
   @Mutation(() => String)
