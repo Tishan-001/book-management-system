@@ -42,9 +42,6 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
-# firebase json
-book-management.json
-
 # temp directory
 .temp
 .tmp
