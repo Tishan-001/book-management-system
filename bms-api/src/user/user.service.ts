@@ -26,11 +26,11 @@ export class UserService {
     }
 
     const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
-    const newUser = new this.userModel({
+    const newUser = await this.userModel.create({
       ...createUserInput,
       password: hashedPassword,
     });
-    return newUser.save();
+    return newUser;
   }
 
   async findAll(): Promise<User[]> {

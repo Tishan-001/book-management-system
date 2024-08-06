@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import { User } from 'src/user/schema/user.schema';
+import { User } from '../../user/schema/user.schema';
 
 export type BookDocument = HydratedDocument<Book>;
 
