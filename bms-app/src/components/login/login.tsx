@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -16,7 +16,7 @@ import { LOGIN_MUTATION } from '@/lib/graphql-mutation';
 import { Logo } from '../logo';
 import { useRouter } from 'next/navigation';
 
-const Login: FC = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
